@@ -7,6 +7,13 @@ const rp = require("request-promise");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const setCookie = require("set-cookie-parser");
+const exphbs = require('express3-handlebars');
+const hbs = exphbs.create({
+  defaultLayout: 'default',
+  extname: '.handlebars'
+});
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 app.use(bodyParser.json());
 
@@ -310,7 +317,23 @@ app.delete('/swrecords/:unid', function(req, res, next){
    });
  
  })
- 
+app.get("/render_data", function(req,res,next){
+  const options = {
+    url: `http://Egghead1/nodejs.nsf/api/data/collections/name/star_wars`,
+    method: 'GET',
+    resolveWithFullResponse: true,
+    json: true
+  }
+
+  rp(options).then(function(response){
+    const records = response.body;
+    res.render('demo', {records});
+
+  }).catch(function(err){
+    res.status(err.statusCode).send(err.response)
+  })
+
+})
 
 
 // Serve static files
