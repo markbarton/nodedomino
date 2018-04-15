@@ -27,6 +27,9 @@
             <button onclick="login()" type="button" class="btn btn-primary">
                 <i class="fas fa-lock"></i> Login
             </button>
+            <button onclick="getDominoData()" type="button" class="btn btn-primary">
+                <i class="fas fa-lock"></i> Get Domino Data
+            </button>
         </form>
 
         <div class="row">
@@ -80,6 +83,24 @@
             })
         }
      
+        function getDominoData() {
+            const options = {};
+            options.method = 'get';
+            options.url = '/dominodata';
+            const NodeDomAuthSessId = localStorage.getItem('NodeDomAuthSessId');
+            options.headers={};
+            if (NodeDomAuthSessId) {
+                options.headers['NodeDomAuthSessId']= NodeDomAuthSessId 
+            }
+            axios.request(options).then(function (result) {
+                console.log(result);
+            }).catch(function (err) {
+                console.log(err);
+
+            })
+
+
+        }
     </script>
 
 </body>

@@ -29,9 +29,8 @@ app.get("/demo", function(req, res, next) {
       .catch(function(err) {
         return res.status(err.response.statusCode).send(err.response.body);
       });
-  });
-  
-  app.post("/login", function(req, res, next) {
+  }); 
+app.post("/login", function(req, res, next) {
     const { Username, Password } = req.body;
     const options = {
       uri: "http://Egghead1/names.nsf?login",
@@ -71,7 +70,30 @@ app.get("/demo", function(req, res, next) {
         return res.send(err);
       });
   });
+app.get("/dominodata", function(req, res, next) {
+    const { nodedomauthsessid} = req.headers;
+    const options = {
+      uri: "http://Egghead1/nodejs.nsf/api/data/collections/name/all",
+      resolveWithFullResponse: true,
+      headers: {
+        Cookie: `DomAuthSessId=${nodedomauthsessid}`
+      }
+    };
   
+    rp(options)
+      .then(function(response) {
+        const { headers, body } = response;
+        const dominoauthenticationfailure = headers.dominoauthenticationfailure;
+        if (dominoauthenticationfailure) {
+          return res.status(401).send(dominoauthenticationfailure);
+        }
+        return res.send(response.body);
+      })
+      .catch(function(err) {
+        return res.status(err.response.statusCode).send(err.response.body);
+      });
+  });
+
 // Serve static files
 app.use(express.static("public"));
 
