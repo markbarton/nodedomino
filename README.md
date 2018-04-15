@@ -9,3 +9,5 @@ This example HTML file references some external libraries via a CDN (Bootstrap, 
 
 You will need to modify the login URL to your Domino Server and then use your credentials for checking the log in code.
 This URL is in the server.js file.
+
+The Example NSF file can be found in lesson 1 - [https://github.com/markbarton/nodedomino/blob/lesson1/nodejs.nsf]
