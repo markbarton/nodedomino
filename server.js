@@ -198,6 +198,121 @@ app.post("/swrecord", function(req, res, next) {
       return res.status(err.statusCode).send(err.error.message);
     });
 });
+app.get('/swrecords', function(req, res, next){
+  const {nodedomauthsessid} = req.headers;
+  if(!nodedomauthsessid){
+   return res.status(401).send(`No NodeDomAuthSessId header`);
+  }
+  const options = {
+    uri: "http://Egghead1/nodejs.nsf/api/data/collections/name/star_wars",
+    resolveWithFullResponse: true,
+    headers:{
+      Cookie: `DomAuthSessId=${nodedomauthsessid}`
+    }
+  };
+  rp(options)
+  .then(function(response){
+   const { headers, body } = response;
+   const dominoauthenticationfailure = headers.dominoauthenticationfailure;
+   if (dominoauthenticationfailure) {
+     return res.status(401).send(dominoauthenticationfailure);
+   }
+   return res.send(response.body);
+  })
+  .catch(function(err){
+   return res.status(err.response.statusCode).send(err.response.body);
+  })
+ 
+ 
+ })
+app.get('/swrecords/:unid', function(req, res, next){
+   const { nodedomauthsessid } = req.headers;
+   if (!nodedomauthsessid) {
+     return res.status(401).send(`No NodeDomAuthSessId header`);
+   }
+   const options = {
+     uri: `http://Egghead1/nodejs.nsf/api/data/documents/unid/${req.params.unid}`,
+     resolveWithFullResponse: true,
+     headers: {
+       Cookie: `DomAuthSessId=${nodedomauthsessid}`
+     }
+   };
+   rp(options)
+     .then(function(response) {
+       const { headers, body } = response;
+       const dominoauthenticationfailure = headers.dominoauthenticationfailure;
+       if (dominoauthenticationfailure) {
+         return res.status(401).send(dominoauthenticationfailure);
+       }
+       return res.send(response.body);
+     })
+     .catch(function(err) {
+       return res.status(err.response.statusCode).send(err.response.body);
+     });
+ 
+ })
+app.patch('/swrecords/:unid', function(req,res,next){
+   const { nodedomauthsessid } = req.headers;
+   if (!nodedomauthsessid) {
+     return res.status(401).send(`No NodeDomAuthSessId header`);
+   }
+ 
+   const options = {
+     uri: `http://Egghead1/nodejs.nsf/api/data/documents/unid/${req.params.unid}`,
+     headers: {
+       cookie: `DomAuthSessId=${nodedomauthsessid}`,
+       'X-HTTP-Method-Override':`PATCH`
+     },
+     body: req.body,
+     json: true,
+     resolveWithFullResponse: true
+   };
+ 
+   rp.post(options).then(function(response) {
+     const { dominoauthenticationfailure, location } = response.headers;
+     if (dominoauthenticationfailure) {
+       return res.status(401).send(dominoauthenticationfailure);
+     }
+     res.send(response.body);
+   })
+   .catch(function(err){
+     return res.status(err.statusCode).send(err.error.message);
+   });
+ 
+ 
+ })
+app.delete('/swrecords/:unid', function(req, res, next){
+   
+   const { nodedomauthsessid } = req.headers;
+   if (!nodedomauthsessid) {
+     return res.status(401).send(`No NodeDomAuthSessId header`);
+   }
+ 
+   const options = {
+     uri: `http://Egghead1/nodejs.nsf/api/data/documents/unid/${req.params.unid}`,
+     headers: {
+       cookie: `DomAuthSessId=${nodedomauthsessid}`
+     },
+     method:'DELETE',
+     resolveWithFullResponse: true,
+     json:true
+   };
+ 
+   rp(options).then(function(response) {
+     const { dominoauthenticationfailure, location } = response.headers;
+     if (dominoauthenticationfailure) {
+       return res.status(401).send(dominoauthenticationfailure);
+     }
+     res.send(response.body);
+   })
+   .catch(function(err){
+    return res.status(err.statusCode).send(err.error.message);
+   });
+ 
+ })
+ 
+
+
 // Serve static files
 app.use(express.static("public"));
 

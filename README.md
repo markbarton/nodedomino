@@ -1,9 +1,11 @@
 # Egghead NodeJS & IBM Domino Integration Course
-## Lesson 9 - Post data to IBM Domino via NodeJS
+## Lesson 10 - Update and delete data in Domino via NodeJS
+
+For this lesson you should remove the ability for you to delete from the ACL of the demo database.
 
 You must do a npm install after switching to this branch.
 
-An example form will be served from the public folder via the NodeJS server.  For this lesson it is called swrecord.html
+An example form will be served from the public folder via the NodeJS server.  For this lesson it is called swrecords.html
 
 This example HTML file references some external libraries via a CDN (Bootstrap, fontawesome, axios)
 
