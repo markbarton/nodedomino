@@ -12,6 +12,7 @@
   "homepage": "https://github.com/markbarton/nodedomino#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "express3-handlebars": "^0.5.2",
     "jsonwebtoken": "^8.2.1",

@@ -1,11 +1,11 @@
 # Egghead NodeJS & IBM Domino Integration Course
-## Lesson 11 - Render Domino Data using Handlebars templates in Express
+## Lesson 12 - Merge and manipulate Domino HTML in an Express application using cheerio
 
 For this lesson you should give anonymous reader access in the ACL of the test database.
 If when testing you do not get any data displayed its possibly because you havent updated the ACL.
 
 You must do a npm install after switching to this branch.
 
-You will need to change the handlebars template (demo) to repoint the URL for the example images to your Domino Server.
+You will need to change the server.js file for the new route to change the URL to point to your Domino Server.
 
 The example database is in lesson 1 if required.
