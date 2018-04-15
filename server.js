@@ -154,6 +154,50 @@ app.get("/userroles", function(req, res, next) {
       return res.status(err.response.statusCode).send(err.response.body);
     });
 });
+app.post("/swrecord", function(req, res, next) {
+  const { nodedomauthsessid } = req.headers;
+  if (!nodedomauthsessid) {
+    return res.status(401).send(`No NodeDomAuthSessId header`);
+  }
+  const options = {
+    uri: "http://Egghead1/nodejs.nsf/api/data/documents?form=starwars_record",
+    headers: {
+      cookie: `DomAuthSessId=${nodedomauthsessid}`
+    },
+    body: req.body,
+    json: true,
+    resolveWithFullResponse: true
+  };
+  rp
+    .post(options)
+    .then(function(response) {
+      const { dominoauthenticationfailure, location } = response.headers;
+      if (dominoauthenticationfailure) {
+        return res.status(401).send(dominoauthenticationfailure);
+      }
+      const redirect_option = {
+        uri: location,
+        headers: {
+          cookie: `DomAuthSessId=${nodedomauthsessid}`
+        },
+        json: true,
+        resolveWithFullResponse: true
+      };
+      rp
+        .get(redirect_option)
+        .then(function(response) {
+          return res.send(response.body);
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(err.statusCode).send(err.error.message);
+        });
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(err.statusCode).send(err.error.message);
+    });
+});
 // Serve static files
 app.use(express.static("public"));
 

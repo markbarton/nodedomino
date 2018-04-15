@@ -1,0 +1,178 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h1>Egghead Domino - Star Wars Record</h1>
+            </div>
+        </div>
+
+        <form onsubmit="login()" id="login_form" class="p-3 mt-5 mb-2 bg-light text-dark form-horizontal">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Domino Login</h4>
+                    <hr/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="username" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password" autocomplete="password"></input>
+            </div>
+            <button onclick="login()" type="button" class="btn btn-primary">
+                <i class="fas fa-lock"></i> Login
+            </button>
+
+        </form>
+
+        <form onsubmit="return false" id="sw_record" class="d-none p-3 mb-2 bg-light text-dark">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Star Wars Record</h4>
+                    <hr/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" autocomplete="Name">
+            </div>
+            <div class="form-group">
+                <label for="height">Height</label>
+                <input class="form-control" type="text" name="height" id="height" autocomplete="Height"></input>
+            </div>
+            <div class="form-group">
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="gender_1" value="Male">
+                    <label class="form-check-label" for="inlineRadioMale">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="gender_2" value="Female">
+                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                </div>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="films" value="A New Hope" id="films_1">
+                <label class="form-check-label" for="films_1">
+                    A New Hope
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="films" value="The Empire Strikes Back" id="films_2">
+                <label class="form-check-label" for="films_2">
+                    The Empire Strikes Back
+                </label>
+            </div>
+            <button onclick="save()" type="button" class="btn btn-primary">
+                <i class="fas fa-lock"></i> Save
+            </button>
+            <div class="row">
+                <div class="col-sm p-3 mt-5 mb-2 bg-success text-white d-none" id="result">
+
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-danger d-none" id="error_container">
+                    <div class="d-flex">
+                        <i class="fas fa-exclamation-triangle fa-3x mr-4"></i>
+                        <p id="error_message"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function save() {
+
+            // Hide containers by default
+            const success_container = document.getElementById('result');
+            success_container.classList.replace('d-block', 'd-none');
+
+            const error_container = document.getElementById('error_container');
+            error_container.classList.replace('d-block', 'd-none');
+
+            const options = {};
+            options.method = 'post';
+            options.url = '/swrecord';
+            const NodeDomAuthSessId = localStorage.getItem('NodeDomAuthSessId');
+            if (NodeDomAuthSessId) {
+                options.headers = { 'NodeDomAuthSessId': NodeDomAuthSessId }
+            }
+
+            options.data = {
+                name: document.getElementById('name').value,
+                height: document.getElementById('height').value,
+                gender: document.querySelector('input[name=gender]:checked').value,
+                films: Array.from(document.querySelectorAll('input[name=films]:checked'))
+                .map((checkbox) => checkbox.value)
+            }
+            axios.request(options).then(
+                function (result) {
+                    console.log(result);
+                    //const success_message = document.getElementById('success_message');
+                    document.getElementById('result').innerHTML =
+                        `<pre class="text-white">
+                            ${JSON.stringify(result.data, undefined, 2)}</pre>`;
+                    success_container.classList.replace('d-none', 'd-block');
+                }
+            ).catch(function (err) {
+                if (err.response) {
+                    const error_message = document.getElementById('error_message');
+                    error_message.innerText = err.response.data;
+                    error_container.classList.replace('d-none', 'd-block');
+                }
+
+            })
+        }
+        function login() {
+
+            const error_container = document.getElementById('error_container');
+            error_container.classList.replace('d-block', 'd-none');
+
+            axios.post('/login', {
+                Username: document.getElementById('username').value,
+                Password: document.getElementById('password').value
+            }).then(
+                function (result) {
+                    localStorage.setItem('NodeDomAuthSessId', result.data);
+                    // Hide Login Form
+                    document.getElementById('login_form').classList.add('d-none');
+                    // Display Record Form
+                    document.getElementById('sw_record').classList.replace('d-none', 'd-block');
+                }
+            ).catch(function (err) {
+                if (err.response) {
+                    if (err.response.status === 401 || err.response.status === 403) {
+                        const error_message = document.getElementById('error_message');
+                        error_message.innerText = err.response.data;
+                        error_container.classList.replace('d-none', 'd-block');
+                    }
+                }
+
+            })
+        }
+    </script>
+
+</body>
+
+</html>
