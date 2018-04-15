@@ -1,5 +1,9 @@
 # Egghead NodeJS & IBM Domino Integration Course
-## Lesson 7 - Send JWT Containing Encrypted User Role Information from Client to Express Server
+## Lesson 8 - Decode and Verify JWT in Express
+
+For this lesson you will need to enable an Admin role in the ACL for the example Notes database for your Test User.
+
+You will need to modify the example code in the server.js to check for the Admin role / Test role - it is currently set to the Test role which does not exist and therefore will throw a 403.
 
 You must do a npm install after switching to this branch.
 
