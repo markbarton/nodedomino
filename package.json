@@ -1,0 +1,18 @@
+{
+  "name": "dominonode2",
+  "version": "1.0.0",
+  "description": "Example code to go with the Egghead videos on Domino and NodeJS intergration",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markbarton/nodedomino.git"
+  },
+  "author": "markbarton@gmail.com",
+  "license": "ISC",
+  "homepage": "https://github.com/markbarton/nodedomino#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  }
+}
