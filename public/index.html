@@ -67,6 +67,10 @@
             }
             axios.request(options).then(function (result) { 
                 console.log(result);
+                const auth_token = `Bearer ${result.data}`;
+                localStorage.setItem('NodeDomUserInfo', auth_token);
+                axios.defaults.headers.common['Authorization'] = auth_token;
+                axios.defaults.headers.common['NodeDomAuthSessId'] = NodeDomAuthSessId;
             }).catch(function (err) {
                 console.log(err);
             })
@@ -106,11 +110,6 @@
             const options = {};
             options.method = 'get';
             options.url = '/dominodata';
-            const NodeDomAuthSessId = localStorage.getItem('NodeDomAuthSessId');
-            options.headers={};
-            if (NodeDomAuthSessId) {
-                options.headers['NodeDomAuthSessId']= NodeDomAuthSessId 
-            }
             axios.request(options).then(function (result) {
                 console.log(result);
             }).catch(function (err) {

@@ -1,5 +1,5 @@
 # Egghead NodeJS & IBM Domino Integration Course
-## Lesson 6 - Encrypt Domino User Roles into a JWT in Express
+## Lesson 7 - Send JWT Containing Encrypted User Role Information from Client to Express Server
 
 You must do a npm install after switching to this branch.
 
