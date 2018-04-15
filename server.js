@@ -4,7 +4,7 @@ const pjson = require("./package.json");
 const port = ("port", process.env.PORT || 8088);
 const app = express();
 const rp = require("request-promise");
-
+const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const setCookie = require("set-cookie-parser");
 
@@ -115,8 +115,20 @@ app.get("/userroles", function(req, res, next) {
           // Authentication Failure - lets bat it back
           return res.status(401).send(headers.dominoauthenticationfailure);
         }
+        const { username, roles } = response.body.user;
+        const today = new Date();
+        const exp = new Date(today);
+        exp.setDate(today.getDate() + 7);
+        const payload = jwt.sign(
+          {
+            username,
+            roles,
+            exp: parseInt(exp.getTime() / 1000, 10)
+          },
+          "egghead"
+        );
   
-        return res.json(response.body);
+        return res.send(payload);
       })
       .catch(function(err) {
         console.log(err);

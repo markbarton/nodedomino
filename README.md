@@ -1,5 +1,5 @@
 # Egghead NodeJS & IBM Domino Integration Course
-## Lesson 5 - Getting Domino User information via a NodeJS application
+## Lesson 6 - Encrypt Domino User Roles into a JWT in Express
 
 You must do a npm install after switching to this branch.
 
