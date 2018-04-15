@@ -93,7 +93,36 @@ app.get("/dominodata", function(req, res, next) {
         return res.status(err.response.statusCode).send(err.response.body);
       });
   });
-
+app.get("/userroles", function(req, res, next) {
+    const { nodedomauthsessid } = req.headers;
+    if (!nodedomauthsessid) {
+      return res.status(401).send(`No NodeDomAuthSessId header`);
+    }
+  
+    const option = {
+      uri: "http://Egghead1/nodejs.nsf/user?openpage",
+      resolveWithFullResponse: true,
+      headers: {
+        Cookie: `DomAuthSessId=${nodedomauthsessid}`
+      },
+      json: true
+    };
+  
+    rp(option)
+      .then(function(response) {
+        const { headers, body } = response;
+        if ("dominoauthenticationfailure" in headers) {
+          // Authentication Failure - lets bat it back
+          return res.status(401).send(headers.dominoauthenticationfailure);
+        }
+  
+        return res.json(response.body);
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(err.response.statusCode).send(err.response.body);
+      });
+  });
 // Serve static files
 app.use(express.static("public"));
 

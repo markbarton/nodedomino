@@ -30,6 +30,9 @@
             <button onclick="getDominoData()" type="button" class="btn btn-primary">
                 <i class="fas fa-lock"></i> Get Domino Data
             </button>
+            <button onclick="getUserRoles()" type="button" class="btn btn-primary">
+                <i class="fas fa-lock"></i> Get Userroles
+            </button>
         </form>
 
         <div class="row">
@@ -53,6 +56,22 @@
     </div>
 
     <script>
+
+         function getUserRoles() {
+            const options = {};
+            options.method = 'get';
+            options.url = '/userroles';
+            const NodeDomAuthSessId = localStorage.getItem('NodeDomAuthSessId');
+            if (NodeDomAuthSessId) {
+                options.headers = { 'NodeDomAuthSessId': NodeDomAuthSessId }
+            }
+            axios.request(options).then(function (result) { 
+                console.log(result);
+            }).catch(function (err) {
+                console.log(err);
+            })
+        }
+
         function login() {
             const login_success_container = document.getElementById('login_success');
             login_success_container.classList.replace('d-block', 'd-none');
