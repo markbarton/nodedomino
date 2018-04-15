@@ -8,4 +8,4 @@ You must do a npm install after switching to this branch.
 
 You will need to change the handlebars template (demo) to repoint the URL for the example images to your Domino Server.
 
-The example database is in lesson 1 if required.
+The Example NSF file can be found in lesson 1 - [https://github.com/markbarton/nodedomino/blob/lesson1/nodejs.nsf]
