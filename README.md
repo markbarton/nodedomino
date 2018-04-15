@@ -1,7 +1,7 @@
 # Egghead NodeJS & IBM Domino Integration Course
 ## Lesson 10 - Update and delete data in Domino via NodeJS
 
-For this lesson you should remove the ability for you to delete from the ACL of the demo database.
+For this lesson initially disable delete access for your test user from the ACL of the demo database.
 
 You must do a npm install after switching to this branch.
 
