@@ -66,7 +66,6 @@
                     login_success_message.innerText = `Success logging in DomAuthSessId = 
              ${result.data}`;
                     login_success_container.classList.replace('d-none', 'd-block');
-                    localStorage.setItem('NodeDomAuthSessId', result.data);
                 }
             ).catch(function (err) {
                 if (err.response) {
