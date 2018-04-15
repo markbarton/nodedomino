@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h1>Egghead Domino Login</h1>
+            </div>
+        </div>
+        <form onsubmit="login()">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="username" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password" autocomplete="password"></input>
+            </div>
+            <button onclick="login()" type="button" class="btn btn-primary">
+                <i class="fas fa-lock"></i> Login
+            </button>
+        </form>
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="alert alert-success d-none" id="login_success">
+                    <div class="d-flex">
+                        <i class="fas fa-check fa-3x mr-4"></i>
+                        <p id="login_success_message"></p>
+                    </div>
+                </div>
+                <div class="alert alert-danger d-none" id="login_error">
+                    <div class="d-flex">
+                        <i class="fas fa-exclamation-triangle fa-3x mr-4"></i>
+                        <p id="login_error_message"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        function login() {
+            const login_success_container = document.getElementById('login_success');
+            login_success_container.classList.replace('d-block', 'd-none');
+
+            const login_error_container = document.getElementById('login_error');
+            login_error_container.classList.replace('d-block', 'd-none');
+
+            axios.post('/login', {
+                Username: document.getElementById('username').value,
+                Password: document.getElementById('password').value
+            }).then(
+                function (result) {
+                    const login_success_message = document.getElementById('login_success_message');
+                    login_success_message.innerText = `Success logging in DomAuthSessId = 
+             ${result.data}`;
+                    login_success_container.classList.replace('d-none', 'd-block');
+                    localStorage.setItem('NodeDomAuthSessId', result.data);
+                }
+            ).catch(function (err) {
+                if (err.response) {
+                    if (err.response.status === 401 || err.response.status === 403) {
+                        const login_error_message = document.getElementById('login_error_message');
+                        login_error_message.innerText = err.response.data;
+                        login_error_container.classList.replace('d-none', 'd-block');
+                    }
+                }
+
+            })
+        }
+     
+    </script>
+
+</body>
+
+</html>

@@ -11,8 +11,10 @@
   "license": "ISC",
   "homepage": "https://github.com/markbarton/nodedomino#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "request": "^2.85.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "set-cookie-parser": "^2.1.1"
   }
 }

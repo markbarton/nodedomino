@@ -5,6 +5,11 @@ const port = ("port", process.env.PORT || 8088);
 const app = express();
 const rp = require("request-promise");
 
+const bodyParser = require("body-parser");
+const setCookie = require("set-cookie-parser");
+
+app.use(bodyParser.json());
+
 app.get("/demo", function(req, res, next) {
     const options = {
       uri: "http://Egghead1/nodejs.nsf/api/data/collections/name/all",
@@ -25,7 +30,48 @@ app.get("/demo", function(req, res, next) {
         return res.status(err.response.statusCode).send(err.response.body);
       });
   });
-
+  
+  app.post("/login", function(req, res, next) {
+    const { Username, Password } = req.body;
+    const options = {
+      uri: "http://Egghead1/names.nsf?login",
+      resolveWithFullResponse: true,
+      form: { Username, Password },
+      simple: false
+    };
+    rp
+      .post(options)
+      .then(function(response) {
+        const { headers, body } = response;
+        const dominoauthenticationfailure = headers.dominoauthenticationfailure;
+  
+        if (dominoauthenticationfailure) {
+          // authentication failure
+          return res.status(401).send(dominoauthenticationfailure);
+        }
+  
+        // Decode cookies
+        const cookies = setCookie.parse(response, {
+          decodeValues: true
+        });
+  
+        //filter cookies to only DomAuthSessId
+        const domino_auth_cookie = cookies.filter(function(cookie) {
+          return cookie.name === "DomAuthSessId";
+        });
+  
+        if (domino_auth_cookie.length > 0) {
+          return res.send(domino_auth_cookie[0].value);
+        }
+  
+        return res.send(body);
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.send(err);
+      });
+  });
+  
 // Serve static files
 app.use(express.static("public"));
 
